@@ -1,0 +1,11 @@
+{
+  "name": "bratlas",
+  "version": "0.0.1",
+  "description": "bright rain atlas: wander away",
+  "main": "index.js",
+  "scripts": {
+    "start": "browser-sync start --server --watch --browser \"chrome\""
+  },
+  "author": "dp",
+  "license": "ISC"
+}

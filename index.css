@@ -1,0 +1,106 @@
+body {
+  font-family: 'Source Sans Pro', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.geocoder {
+  top: 0.5rem;
+  position: absolute;
+  z-index: 2;
+}
+
+#brat {
+  position: absolute;
+  z-index: 2;
+}
+
+#theA {
+  font-weight: bold;
+  font-size: 0.8em;
+}
+
+#shareLocationBtn {
+  position: absolute;
+  z-index: 9;
+  border-radius: 5px;
+  line-height: 25px;
+  border: none;
+  background-color: white;
+}
+
+#message {
+  position: absolute;
+  z-index: 9;
+  padding: 8px;
+  background-color: white;
+  visibility: hidden;
+  font-size: 1em;
+}
+
+ @media only screen and (max-width: 600px) {
+  .mapboxgl-ctrl-top-right {
+    right: none;
+    width: 95%;
+    height: 35px
+    }
+
+    #brat {
+      bottom: 1.2rem;
+      left: 0.5rem;
+      font-size: 3em;
+    }
+
+    #shareLocationBtn {
+      bottom: none;
+      top: 70px;
+      left: 10px;
+    }
+    
+    #message {
+      bottom: none;
+      top: 70px;
+      left: 10px;
+    }
+ }
+ 
+ @media only screen and (min-width: 601px) {
+  #brat {
+    top: 0.5rem;
+    left: 0.5rem;
+    font-size: 3em;
+  }
+
+  #shareLocationBtn {
+    bottom: 50px;
+    left: 25px;
+  }
+  
+  #message {
+    bottom: 50px;
+    left: 25px;
+  }
+ }
+
+.primary-orange {
+  color: #ff6600
+}
+
+.primary-blue {
+  color: #0044aa
+}
+
+.secondary-gray {
+  color: #b7c4c8
+}
+
+.secondary-brown {
+  color: #9B7653
+}
