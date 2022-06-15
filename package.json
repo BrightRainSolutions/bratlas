@@ -4,8 +4,12 @@
   "description": "bright rain atlas: wander away",
   "main": "index.js",
   "scripts": {
-    "start": "browser-sync start --server --watch --browser \"chrome\""
+    "start": "browser-sync start --server --watch --browser \"chrome\"",
+    "build": "copyfiles * -e 'node_modules/**/*' dist"
   },
   "author": "dp",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "copyfiles": "^2.4.1"
+  }
 }
