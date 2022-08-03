@@ -4,6 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
 		container: 'map',
 		// that bright rain style
 		style: 'mapbox://styles/brightrain/ck2pc8klt0c981cp9c2rwx9f1',
+		// ToDo: hate disabling this but double click also fires the single click which
+		// moves our marker to that location
+		// gotta be a workaround, right?
+		// tried the settimeout trick to determine single or double click but no workie
+		doubleClickZoom: false,
 		bounds: [
 			[-125, 48],
 			[-70, 40]
@@ -11,16 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
 		//center: [-100, 45],
 		//zoom: 4
 	});
-	// Add the control to the map.
-	const geocoder = new MapboxGeocoder({
-		accessToken: mapboxgl.accessToken,
-		mapboxgl: mapboxgl
-	});
 
+	// Add a geocoder control to the map
 	map.addControl(
 		new MapboxGeocoder({
 			accessToken: mapboxgl.accessToken,
-			mapboxgl: mapboxgl
+			mapboxgl: mapboxgl,
+			marker: {
+				color: '#0044aa'
+			}
 		})
 	);
 
@@ -37,7 +41,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	);
 
 	document.getElementById("shareLocationBtn").onclick = () => {
-		const {lng, lat} = map.getCenter();
+		//const {lng, lat} = map.getCenter();
+		const {
+			lng,
+			lat
+		} = pinDrop.getLngLat();
 		let url = window.location.host +
 			window.location.pathname +
 			"?lat=" + lat + "&lng=" + lng + "&zoom=" + map.getZoom();
@@ -57,6 +65,28 @@ document.addEventListener('DOMContentLoaded', () => {
 				}, 3000);
 			});
 	}
+
+	const pin = document.createElement('div');
+	pin.className = 'marker';
+	// Add marker to the map
+	let pinDrop = new mapboxgl.Marker(pin, {
+			draggable: true
+		})
+		// off to null island
+		// ToDo: figure out if/how to not show this at all initially
+		.setLngLat([0, 0])
+		.addTo(map);
+
+	// change button text when clicked the first time
+	map.once('click', (e) => {
+		const shareBtn = document.getElementById("shareLocationBtn");
+		shareBtn.innerHTML = "SHARE PIN LOCATION";
+		shareBtn.disabled = false;
+	});
+
+	map.on('click', (e) => {
+		pinDrop.setLngLat(e.lngLat);
+	});
 
 	map.on('load', () => {
 		map.addSource('dem', {
@@ -81,10 +111,15 @@ document.addEventListener('DOMContentLoaded', () => {
 				const lat = urlParams.get('lat');
 				const lng = urlParams.get('lng');
 				const zoom = urlParams.has('zoom') ? urlParams.get('zoom') : 16;
-				map.jumpTo({
+				map.flyTo({
 					center: [lng, lat],
 					zoom: zoom
 				});
+				pinDrop.setLngLat([lng, lat]);
+				// set button text and enable
+				const shareBtn = document.getElementById("shareLocationBtn");
+				shareBtn.innerHTML = "SHARE PIN LOCATION";
+				shareBtn.disabled = false;
 			}
 		}
 	});
