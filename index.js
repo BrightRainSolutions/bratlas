@@ -17,28 +17,41 @@ document.addEventListener('DOMContentLoaded', () => {
 		//zoom: 4
 	});
 
-	// Add a geocoder control to the map
-	map.addControl(
-		new MapboxGeocoder({
-			accessToken: mapboxgl.accessToken,
-			mapboxgl: mapboxgl,
-			marker: {
-				color: '#0044aa'
-			}
-		})
-	);
+	// Add a geocoder search control to the map
+	const geocoder = new MapboxGeocoder({
+		accessToken: mapboxgl.accessToken,
+		mapboxgl: mapboxgl,
+		marker: false
+	});
+	map.addControl(geocoder);
 
-	map.addControl(
-		new mapboxgl.GeolocateControl({
-			positionOptions: {
-				enableHighAccuracy: true
-			},
-			// When active the map will receive updates to the device's location as it changes.
-			trackUserLocation: true,
-			// Draw an arrow next to the location dot to indicate which direction the device is heading.
-			showUserHeading: true
-		})
-	);
+	geocoder.on("result", data => {
+		pinDrop.setLngLat(data.result.center);
+		// enable the share button
+		const shareBtn = document.getElementById("shareLocationBtn");
+		shareBtn.innerHTML = "SHARE PIN LOCATION";
+		shareBtn.disabled = false;
+	});
+
+	const geolocate = new mapboxgl.GeolocateControl({
+		positionOptions: {
+			enableHighAccuracy: true
+		},
+		// When active the map will receive updates to the device's location as it changes.
+		trackUserLocation: true,
+		// Draw an arrow next to the location dot to indicate which direction the device is heading.
+		showUserHeading: true
+	});
+	map.addControl(geolocate);
+
+	geolocate.on('geolocate', (position) => {
+		// put the marker on the location
+		pinDrop.setLngLat([position.coords.longitude, position.coords.latitude]);
+		// enable the share button
+		const shareBtn = document.getElementById("shareLocationBtn");
+		shareBtn.innerHTML = "SHARE PIN LOCATION";
+		shareBtn.disabled = false;
+	});
 
 	document.getElementById("shareLocationBtn").onclick = () => {
 		//const {lng, lat} = map.getCenter();
@@ -70,12 +83,13 @@ document.addEventListener('DOMContentLoaded', () => {
 	pin.className = 'marker';
 	// Add marker to the map
 	let pinDrop = new mapboxgl.Marker(pin, {
-			draggable: true
-		})
-		// off to null island
-		// ToDo: figure out if/how to not show this at all initially
-		.setLngLat([0, 0])
-		.addTo(map);
+		offset: [0, -36],	
+		draggable: true
+	})
+	// off to null island
+	// ToDo: figure out if/how to not show this at all initially
+	.setLngLat([0, 0])
+	.addTo(map);
 
 	// change button text when clicked the first time
 	map.once('click', (e) => {
@@ -97,10 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
 				'id': 'hillshading',
 				'source': 'dem',
 				'type': 'hillshade'
-				// insert below waterway-river-canal-shadow;
-				// where hillshading sits in the Mapbox Outdoors style
-			} //,
-			//'waterway-river-canal-shadow'
+			}
 		);
 		// check to see if there are parameters in the url
 		const queryString = window.location.search;
@@ -110,6 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			if (urlParams.has('lat') && urlParams.has('lng')) {
 				const lat = urlParams.get('lat');
 				const lng = urlParams.get('lng');
+				// if there is a zoom parameter use it otherwise default
 				const zoom = urlParams.has('zoom') ? urlParams.get('zoom') : 16;
 				map.flyTo({
 					center: [lng, lat],
