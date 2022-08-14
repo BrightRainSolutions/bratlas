@@ -1,4 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
+	// PWA support: register service worker
+	if ("sw" in navigator) {
+		window.addEventListener("load", () => {
+		  navigator.serviceWorker
+			.register("/sw.js")
+			.then(res => console.log("service worker registered"))
+			.catch(err => console.log("service worker not registered", err))
+		})
+	  }
+	  
 	mapboxgl.accessToken = 'pk.eyJ1IjoiYnJpZ2h0cmFpbiIsImEiOiJyMjgtNGk4In0.Y64dPMiS4Xi8BXRiDhWXyg';
 	const map = new mapboxgl.Map({
 		container: 'map',
@@ -16,6 +26,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		//center: [-100, 45],
 		//zoom: 4
 	});
+
+	map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
 
 	// Add a geocoder search control to the map
 	const geocoder = new MapboxGeocoder({

@@ -1,0 +1,15 @@
+{
+    "name": "BRATLAS",
+    "short_name": "BR💥TLAS",
+    "start_url": "index.html",
+    "display": "standalone",
+    "background_color": "#0044aa",
+    "theme_color": "#ff6600",
+    "orientation": "portrait-primary",
+    "icons": [
+      {
+        "src": "bratlas-pin.svg",
+        "type": "image/svg"
+      }
+    ]
+  }

@@ -3,6 +3,11 @@
 
 <head>
   <meta charset="utf-8">
+  <link rel="manifest" href="manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="BR💥TLAS">
+  <meta name="apple-mobile-web-app-status-bar" content="#ff6600" />
+  <meta name="theme-color" content="#0044aa" />
   <link rel="icon" href="https://www.brightrain.com/images/fav.png">
   <title>BR💥TLAS</title>
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no">
@@ -16,12 +21,14 @@
 </head>
 
 <body>
-  <div id="brat" class="primary-orange">
-    <b>BR💥TLAS</b><br>
-  </div>
-  <button id="shareLocationBtn" class="primary-orange" disabled>TAP MAP TO SET LOCATION</button>
-  <div id="message" class="primary-orange"></div>
-  <div id="map"></div>
+  <main>
+    <div id="brat" class="primary-orange">
+      <b>BR💥TLAS</b><br>
+    </div>
+    <button id="shareLocationBtn" class="primary-orange" disabled>TAP MAP TO SET LOCATION</button>
+    <div id="message" class="primary-orange"></div>
+    <div id="map"></div>
+</main>
 </body>
 
 </html>
