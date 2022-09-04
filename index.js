@@ -19,12 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
 		// gotta be a workaround, right?
 		// tried the settimeout trick to determine single or double click but no workie
 		doubleClickZoom: false,
-		bounds: [
-			[-125, 48],
-			[-70, 40]
-		]
-		//center: [-100, 45],
-		//zoom: 4
+		center: [-100, 45],
+		zoom: 0
 	});
 
 	map.addControl(new mapboxgl.NavigationControl(), "bottom-right");
@@ -73,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		} = pinDrop.getLngLat();
 		let url = window.location.host +
 			window.location.pathname +
-			"?lat=" + lat + "&lng=" + lng + "&zoom=" + map.getZoom();
+			"?lat=" + lat.toFixed(5) + "&lng=" + lng.toFixed(5) + "&zoom=" + map.getZoom().toFixed(1);
 		navigator.clipboard.writeText(url)
 			.then(() => {
 				document.getElementById("message").innerHTML = "Location url copied to your clipboard";
@@ -125,6 +121,12 @@ document.addEventListener('DOMContentLoaded', () => {
 				'type': 'hillshade'
 			}
 		);
+
+		const getRandomInRange = (from, to, fixed) => {
+			return (Math.random() * (to - from) + from).toFixed(fixed) * 1;
+			// .toFixed() returns string, so ' * 1' is a trick to convert to number
+		}
+
 		// check to see if there are parameters in the url
 		const queryString = window.location.search;
 		if (queryString !== "") {
@@ -145,6 +147,22 @@ document.addEventListener('DOMContentLoaded', () => {
 				shareBtn.innerHTML = "SHARE PIN LOCATION";
 				shareBtn.disabled = false;
 			}
+		}
+		else {
+			// if no parameters head to a random place on earth
+			const lng = getRandomInRange(-180, 180, 2);
+			// now here's the deal about latitude, getting random points from a sphere results in
+			// over-representing toward the poles and as much as I'd to take credit
+			// for this smart truth, it is documented here
+			// https://mathworld.wolfram.com/SpherePointPicking.html
+			// since, let's be honest, there isn't much there for an atlas
+			// let's focus toward the middle more
+			const lat = getRandomInRange(-60, 60, 2);
+			map.flyTo({
+				center: [lng, lat],
+				zoom: 4
+			});
+			pinDrop.setLngLat([lng, lat]);
 		}
 	});
 });
