@@ -35,10 +35,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 	geocoder.on("result", data => {
 		pinDrop.setLngLat(data.result.center);
-		// enable the share button
-		const shareBtn = document.getElementById("shareLocationBtn");
-		shareBtn.innerHTML = "SHARE PIN LOCATION";
-		shareBtn.disabled = false;
+		// get and show info
+		getPinInfo(data.result.center[0], data.result.center[1]);
 	});
 
 	const geolocate = new mapboxgl.GeolocateControl({
@@ -55,13 +53,11 @@ document.addEventListener('DOMContentLoaded', () => {
 	geolocate.on('geolocate', (position) => {
 		// put the marker on the location
 		pinDrop.setLngLat([position.coords.longitude, position.coords.latitude]);
-		// enable the share button
-		const shareBtn = document.getElementById("shareLocationBtn");
-		shareBtn.innerHTML = "SHARE PIN LOCATION";
-		shareBtn.disabled = false;
+		// get and show info
+		getPinInfo(lng, lat);
 	});
 
-	document.getElementById("shareLocationBtn").onclick = () => {
+	document.getElementById("share-location-btn").onclick = () => {
 		//const {lng, lat} = map.getCenter();
 		const {
 			lng,
@@ -99,15 +95,9 @@ document.addEventListener('DOMContentLoaded', () => {
 	.setLngLat([0, 0])
 	.addTo(map);
 
-	// change button text when clicked the first time
-	map.once('click', (e) => {
-		const shareBtn = document.getElementById("shareLocationBtn");
-		shareBtn.innerHTML = "SHARE PIN LOCATION";
-		shareBtn.disabled = false;
-	});
-
 	map.on('click', (e) => {
 		pinDrop.setLngLat(e.lngLat);
+		getPinInfo(e.lngLat.lng, e.lngLat.lat);
 	});
 
 	map.on('load', () => {
@@ -142,10 +132,9 @@ document.addEventListener('DOMContentLoaded', () => {
 					zoom: zoom
 				});
 				pinDrop.setLngLat([lng, lat]);
-				// set button text and enable
-				const shareBtn = document.getElementById("shareLocationBtn");
-				shareBtn.innerHTML = "SHARE PIN LOCATION";
-				shareBtn.disabled = false;
+				// get and show info
+				// ToDo: do we want to do this when this is a shared pin url?
+				getPinInfo(lng, lat);
 			}
 		}
 		else {
@@ -163,6 +152,35 @@ document.addEventListener('DOMContentLoaded', () => {
 				zoom: 4
 			});
 			pinDrop.setLngLat([lng, lat]);
+			getPinInfo(lng, lat);
 		}
 	});
+
+	const getPinInfo = (lng, lat) => {
+		const url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + lng +"," + lat + ".json?access_token=" + mapboxgl.accessToken;
+		fetch(url)
+		.then((response) => response.json())
+		.then((data) => {
+			if(data.features.length > 0) {
+				// build the info box content to show the country and place
+				// as well as a link to the country\place in wikipedia
+				// https://www.wikidata.org/wiki/Wikidata:Data_access
+				let content = "";
+				let countryFeature = data.features.find(f => f.place_type.find(pt => pt ==="country"));
+				if(countryFeature) {
+					content += `<h1> ${countryFeature.place_name}</h1>`;
+				}
+				if(countryFeature.properties.wikidata) {
+					content += `<a href="http://www.wikidata.org/entity/${countryFeature.properties.wikidata}" target=_blank>more data about <b>${countryFeature.place_name}</b></a>`;
+				}
+				let placeFeature = data.features.find(f => f.place_type.find(pt => pt === "place"));
+				if(placeFeature) content += `<p>${placeFeature.place_name}</p>`;
+				document.getElementById("info-content").innerHTML = content;
+			}
+			else {
+				document.getElementById("info-content").innerHTML = "<b class='primary-blue'>OCEAN!</b>";
+			}
+			
+		});
+	}
 });
