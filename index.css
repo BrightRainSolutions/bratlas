@@ -58,14 +58,16 @@ a:hover {
 }
 
 #share-location-btn {
-  position: absolute;
-  top: 235px;
-  right: 10px;
   border-radius: 5px;
-  line-height: 25px;
+  padding: 6px;
   border: none;
   background-color: var(--primary-orange);
   color: white
+}
+
+#pin {
+  float: right;
+  width: 60px;
 }
 
 #message {
@@ -97,6 +99,17 @@ a:hover {
     #info-box {
       top: 70px;
       left: 10px;
+    }
+
+    #pin {
+      width: 40px
+    }
+
+    #share-location-btn {
+      top: auto;
+      right: auto;
+      line-height: 1em;
+      padding: 4px
     }
  }
  

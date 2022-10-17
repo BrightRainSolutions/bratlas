@@ -87,8 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	pin.className = 'marker';
 	// Add marker to the map
 	let pinDrop = new mapboxgl.Marker(pin, {
-		offset: [0, -36],	
-		draggable: true
+		offset: [0, -36]
 	})
 	// off to null island
 	// ToDo: figure out if/how to not show this at all initially
@@ -157,24 +156,30 @@ document.addEventListener('DOMContentLoaded', () => {
 	});
 
 	const getPinInfo = (lng, lat) => {
-		const url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + lng +"," + lat + ".json?access_token=" + mapboxgl.accessToken;
+		const url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + 
+			lng +"," + lat + 
+			".json?access_token=" + mapboxgl.accessToken;
 		fetch(url)
 		.then((response) => response.json())
 		.then((data) => {
 			if(data.features.length > 0) {
 				// build the info box content to show the country and place
 				// as well as a link to the country\place in wikipedia
-				// https://www.wikidata.org/wiki/Wikidata:Data_access
+				// https://en.wikipedia.org/wiki/Poland
 				let content = "";
+				// get the country
 				let countryFeature = data.features.find(f => f.place_type.find(pt => pt ==="country"));
+				// if we have a country add the name
 				if(countryFeature) {
-					content += `<h1> ${countryFeature.place_name}</h1>`;
+					content += `<h2> ${countryFeature.place_name}</h2>`;
 				}
-				if(countryFeature.properties.wikidata) {
-					content += `<a href="http://www.wikidata.org/entity/${countryFeature.properties.wikidata}" target=_blank>more data about <b>${countryFeature.place_name}</b></a>`;
-				}
+				// if we have more details, add it
 				let placeFeature = data.features.find(f => f.place_type.find(pt => pt === "place"));
 				if(placeFeature) content += `<p>${placeFeature.place_name}</p>`;
+				if(countryFeature) {
+					// add a link to wikipedia for the country
+					content += `<a href="https://en.wikipedia.org/wiki/${countryFeature.place_name}" target=_blank style="float:right">more about <b>${countryFeature.place_name}</b></a>`;
+				}
 				document.getElementById("info-content").innerHTML = content;
 			}
 			else {
