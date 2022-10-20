@@ -49,7 +49,7 @@ a:hover {
   left: 10px;
   top: 10px;
   width: 35vw;
-  height: 250px;
+  min-height: 250px;
   z-index: 9;
   padding: 8px;
   background-color: white;
@@ -65,9 +65,12 @@ a:hover {
   color: white
 }
 
-#pin {
+#bratlas {
   float: right;
-  width: 60px;
+}
+
+#pin {
+  width: 40px;
 }
 
 #message {
@@ -105,6 +108,14 @@ a:hover {
       width: 40px
     }
 
+    #message {
+      top: 70px;
+    }
+
+    #bratlas {
+      font-size: 1em
+    }
+
     #share-location-btn {
       top: auto;
       right: auto;
@@ -117,7 +128,7 @@ a:hover {
   #brat {
     top: 0.5rem;
     left: 0.5rem;
-    font-size: 3em;
+    font-size: 2.2em;
   }
  }
 
