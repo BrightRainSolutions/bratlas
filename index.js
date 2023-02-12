@@ -148,44 +148,53 @@ document.addEventListener('DOMContentLoaded', () => {
 			const lat = getRandomInRange(-60, 60, 2);
 			map.flyTo({
 				center: [lng, lat],
-				zoom: 4
+				zoom: 2
 			});
 			pinDrop.setLngLat([lng, lat]);
 			getPinInfo(lng, lat);
 		}
 	});
 
-	const getPinInfo = (lng, lat) => {
+	const getPinInfo = async (lng, lat) => {
 		const url = "https://api.mapbox.com/geocoding/v5/mapbox.places/" + 
 			lng +"," + lat + 
 			".json?access_token=" + mapboxgl.accessToken;
-		fetch(url)
-		.then((response) => response.json())
-		.then((data) => {
-			if(data.features.length > 0) {
-				// build the info box content to show the country and place
-				// as well as a link to the country\place in wikipedia
-				// https://en.wikipedia.org/wiki/Poland
-				let content = "";
-				// get the country
-				let countryFeature = data.features.find(f => f.place_type.find(pt => pt ==="country"));
-				// if we have a country add the name
-				if(countryFeature) {
-					content += `<h2> ${countryFeature.place_name}</h2>`;
-				}
-				// if we have more details, add it
-				let placeFeature = data.features.find(f => f.place_type.find(pt => pt === "place"));
-				if(placeFeature) content += `<p>${placeFeature.place_name}</p>`;
-				if(countryFeature) {
-					// add a link to wikipedia for the country
-					content += `<a href="https://en.wikipedia.org/wiki/${countryFeature.place_name}" target=_blank style="float:right">more about <b>${countryFeature.place_name}</b></a>`;
-				}
-				document.getElementById("info-content").innerHTML = content;
+		const response = await fetch(url);
+		const place = await response.json();
+		if(place.features.length > 0) {
+			// build the info box content to show the country and place
+			// as well as a link to the country\place in wikipedia
+			// https://en.wikipedia.org/wiki/Poland
+			let content = "";
+			// get the country
+			let countryFeature = place.features.find(f => f.place_type.find(pt => pt ==="country"));
+			// if we have a country add the name
+			if(countryFeature) {
+				content += `<h2> ${countryFeature.place_name}</h2>`;
 			}
-			else {
-				document.getElementById("info-content").innerHTML = "<b class='primary-blue'>OCEAN!</b>";
+			// if we have more details, add it
+			let placeFeature = place.features.find(f => f.place_type.find(pt => pt === "place"));
+			if(placeFeature) content += `<p>${placeFeature.place_name}</p>`;
+			if(countryFeature) {
+				// if we got a place, create a link to it
+				if(placeFeature) {
+					// add a link to wikidata for the place
+					content += `<a href="https://www.wikidata.org/wiki/${placeFeature.properties.wikidata}" target=_blank style="float:right">more about <b>${placeFeature.place_name}</b></a><br><br>`;
+				}
+				// add a link to wikipedia for the country
+				content += `<a href="https://en.wikipedia.org/wiki/${countryFeature.place_name}" target=_blank style="float:right">more about <b>${countryFeature.place_name}</b></a>`;
+				// get the flag!
+				if(countryFeature.properties.short_code) {
+					// https://countryflagsapi.com/
+					// note had to add crossorigin anonymous to make this work
+					content += `<img src="https://countryflagsapi.com/png/${countryFeature.properties.short_code}" width=100 crossorigin="anonymous">`;
+				}
 			}
-			
-		});
+			document.getElementById("info-content").innerHTML = content;
+		}
+		else {
+			// assume if we didn't get a place, we got WATER
+			document.getElementById("info-content").innerHTML = "<b class='primary-blue'>🌊!WATER!🌊</b>";
+		}
 	}
 });
