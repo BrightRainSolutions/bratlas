@@ -175,10 +175,9 @@ document.addEventListener('DOMContentLoaded', () => {
 				if(countryFeature.properties.short_code) {
 					// https://countryflagsapi.com/
 					// note had to add crossorigin anonymous to make this work
-					content += `<img src="https://countryflagsapi.com/png/${countryFeature.properties.short_code}" 
-						style="float:right;margin-top:4px" 
+					content += `<div style="margin-top:4px"><img src="https://countryflagsapi.com/png/${countryFeature.properties.short_code}" 
 						width=80 
-						crossorigin="anonymous"><br style="float:clear">`;
+						crossorigin="anonymous"></div><br>`;
 				}
 			}
 			// if we have more details, add it
@@ -188,10 +187,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				// if we got a place, create a link to it
 				if(placeFeature) {
 					// add a link to wikidata for the place
-					content += `<a href="https://www.wikidata.org/wiki/${placeFeature.properties.wikidata}" target=_blank style="float:right">more about <b>${placeFeature.place_name}</b></a><br><br>`;
+					content += `<div style="margin-bottom:6"><a href="https://www.wikidata.org/wiki/${placeFeature.properties.wikidata}" target=_blank>more about <b>${placeFeature.place_name}</b></a></div>`;
 				}
 				// add a link to wikipedia for the country
-				content += `<a href="https://en.wikipedia.org/wiki/${countryFeature.place_name}" target=_blank style="float:right">more about <b>${countryFeature.place_name}</b></a>`;
+				content += `<div style="margin-bottom:6"><a href="https://en.wikipedia.org/wiki/${countryFeature.place_name}" target=_blank>more about <b>${countryFeature.place_name}</b></a></div>`;
 			}
 			document.getElementById("info-content").innerHTML = content;
 		}
