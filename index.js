@@ -170,7 +170,16 @@ document.addEventListener('DOMContentLoaded', () => {
 			let countryFeature = place.features.find(f => f.place_type.find(pt => pt ==="country"));
 			// if we have a country add the name
 			if(countryFeature) {
-				content += `<h2> ${countryFeature.place_name}</h2>`;
+				content += `<b>${countryFeature.place_name}</b>`;
+				// get the flag!
+				if(countryFeature.properties.short_code) {
+					// https://countryflagsapi.com/
+					// note had to add crossorigin anonymous to make this work
+					content += `<img src="https://countryflagsapi.com/png/${countryFeature.properties.short_code}" 
+						style="float:right;margin-top:4px" 
+						width=80 
+						crossorigin="anonymous"><br style="float:clear">`;
+				}
 			}
 			// if we have more details, add it
 			let placeFeature = place.features.find(f => f.place_type.find(pt => pt === "place"));
@@ -183,12 +192,6 @@ document.addEventListener('DOMContentLoaded', () => {
 				}
 				// add a link to wikipedia for the country
 				content += `<a href="https://en.wikipedia.org/wiki/${countryFeature.place_name}" target=_blank style="float:right">more about <b>${countryFeature.place_name}</b></a>`;
-				// get the flag!
-				if(countryFeature.properties.short_code) {
-					// https://countryflagsapi.com/
-					// note had to add crossorigin anonymous to make this work
-					content += `<img src="https://countryflagsapi.com/png/${countryFeature.properties.short_code}" width=100 crossorigin="anonymous">`;
-				}
 			}
 			document.getElementById("info-content").innerHTML = content;
 		}

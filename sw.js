@@ -1,3 +1,4 @@
+const version = "1.1.0"
 const staticBratlas = "bratlas_app"
 const assets = [
   "/",
