@@ -175,8 +175,10 @@ document.addEventListener('DOMContentLoaded', () => {
 				if(countryFeature.properties.short_code) {
 					// https://countryflagsapi.com/
 					// note had to add crossorigin anonymous to make this work
-					content += `<div style="margin-top:4px"><img src="https://countryflagsapi.com/png/${countryFeature.properties.short_code}" 
-						width=80 
+					content += `<div style="margin-top:4px;">
+					<img src="https://countryflagsapi.com/png/${countryFeature.properties.short_code}" 
+						width=80
+						style="border: lightgray 1px solid;"
 						crossorigin="anonymous"></div><br>`;
 				}
 			}
