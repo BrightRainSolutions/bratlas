@@ -173,13 +173,11 @@ document.addEventListener('DOMContentLoaded', () => {
 				content += `<b>${countryFeature.place_name}</b>`;
 				// get the flag!
 				if(countryFeature.properties.short_code) {
-					// https://countryflagsapi.com/
-					// note had to add crossorigin anonymous to make this work
+					// https://flagpedia.net/download/api
 					content += `<div style="margin-top:4px;">
-					<img src="https://countryflagsapi.com/png/${countryFeature.properties.short_code}" 
+					<img src="https://flagcdn.com/w80/${countryFeature.properties.short_code}.png" 
 						width=80
-						style="border: lightgray 1px solid;"
-						crossorigin="anonymous"></div><br>`;
+						style="border: lightgray 1px solid;"></div><br>`;
 				}
 			}
 			// if we have more details, add it
