@@ -95,6 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	.addTo(map);
 
 	map.on('click', (e) => {
+		document.getElementById("coords").innerHTML = e.lngLat.lat.toFixed(5) + ", " + e.lngLat.lng.toFixed(5);
 		pinDrop.setLngLat(e.lngLat);
 		getPinInfo(e.lngLat.lng, e.lngLat.lat);
 	});
@@ -152,6 +153,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			});
 			pinDrop.setLngLat([lng, lat]);
 			getPinInfo(lng, lat);
+			document.getElementById("coords").innerHTML = lat.toFixed(5) + ", " + lng.toFixed(5);
 		}
 	});
 
