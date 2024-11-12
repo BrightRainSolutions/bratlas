@@ -1,6 +1,6 @@
 {
   "name": "bratlas",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "bright rain atlas: wander away",
   "main": "index.js",
   "scripts": {

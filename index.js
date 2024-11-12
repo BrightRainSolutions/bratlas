@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		})
 	  }
 	  
-	mapboxgl.accessToken = 'pk.eyJ1IjoiYnJpZ2h0cmFpbiIsImEiOiJyMjgtNGk4In0.Y64dPMiS4Xi8BXRiDhWXyg';
+	mapboxgl.accessToken = 'pk.eyJ1IjoiYnJpZ2h0cmFpbiIsImEiOiJjbTNkenN3YnAwOHl5MnFvbm9meHp5aWV5In0.2OrrlsUnV7kh2MZwrp36mw';
 	const map = new mapboxgl.Map({
 		container: 'map',
 		// that bright rain style
