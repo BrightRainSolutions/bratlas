@@ -76,20 +76,36 @@ a:hover {
 }
 
 #sothere {
-  font-size: 1em; /* Normal size for the text and emoji */
-  transition: all 0.3s ease; /* Smooth transition for hover effects */
-  display: inline-flex; /* Ensure text and emoji behave as a single block */
-  align-items: center; /* Center-align the emoji with the text */
-  cursor: pointer; /* Add a pointer cursor to indicate interactivity */
+  display: flex; /* Use flexbox for text and wrapper alignment */
+  align-items: center; /* Vertically align text and emoji wrapper */
+  gap: 0.2em; /* Control space between text and emoji */
+  cursor: pointer; /* Pointer for interactivity */
+  position: relative; /* Establish positioning context */
 }
 
-#sothere span {
-  display: inline-block; /* Treat emoji separately */
-  transition: transform 0.3s ease; /* Smooth animation for scaling */
+#sothere .text {
+  font-size: 1em; /* Normal text size */
+  line-height: 1; /* Eliminate extra vertical space */
 }
 
-#sothere:hover span {
-  transform: scale(5) rotate(15deg); /* In your face! */
+#sothere .emoji-wrapper {
+  position: relative; /* Position the emoji inside the wrapper */
+  display: flex; /* Needed for wrapper alignment */
+  align-items: center; /* Vertically align the emoji */
+}
+
+#sothere .emoji {
+  font-size: 5em; /* Large font size for crisp rendering */
+  line-height: 1; /* Prevent extra vertical space */
+  transform: scale(0.2); /* Visually shrink the emoji initially */
+  transition: transform 0.3s ease, rotate 0.3s ease; /* Smooth hover animation */
+  position: absolute; /* Ignore the emoji's box size in the layout */
+  left: 0; /* Align it to the wrapper's left */
+  transform-origin: center left; /* Animate from the center-left point */
+}
+
+#sothere:hover .emoji {
+  transform: scale(1) rotate(15deg); /* Scale up and tilt the emoji */
 }
 
 /* Controls below the header */
