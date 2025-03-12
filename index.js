@@ -199,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		else {
 			// If no land features found, try to get water body information from GeoNames	
 			// Query GeoNames for nearby water features
-			const geonamesUrl = `//api.geonames.org/extendedFindNearbyJSON?lat=${lat}&lng=${lng}&featureClass=H&radius=1&maxRows=1&username=brightrain`;
+			const geonamesUrl = `//secure.geonames.org/extendedFindNearbyJSON?lat=${lat}&lng=${lng}&featureClass=H&radius=1&maxRows=1&username=brightrain`;
 			try {
 				const geonamesResponse = await fetch(geonamesUrl);
 				const geonamesData = await geonamesResponse.json();
