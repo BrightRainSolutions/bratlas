@@ -197,27 +197,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			document.getElementById("info-content").innerHTML = content;
 		}
 		else {
-			// If no land features found, try to get water body information from GeoNames	
-			// Query GeoNames for nearby water features
-			const geonamesUrl = `//secure.geonames.org/extendedFindNearbyJSON?lat=${lat}&lng=${lng}&featureClass=H&radius=1&maxRows=1&username=brightrain`;
-			try {
-				const geonamesResponse = await fetch(geonamesUrl);
-				const geonamesData = await geonamesResponse.json();
-
-				let content = "";
-
-				if (geonamesData.ocean) {
-					content += `<h3 class='primary-blue'>${geonamesData.ocean.name}</h3>`;
-				}
-				else {
-					content += `<h3 class='primary-blue'>Unnamed water body</h3>`;
-				}
-				document.getElementById("info-content").innerHTML = content;
-			}
-			catch(error) {
-				console.error("Error fetching GeoNames data:", error);
-				document.getElementById("info-content").innerHTML = "<b class='primary-blue'>🌊 Water Body 🌊</b>";
-			}
+			document.getElementById("info-content").innerHTML = "<b class='primary-blue'>🌊 Water Body 🌊</b>";
 		}
 	}
 });
